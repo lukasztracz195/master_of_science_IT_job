@@ -1,0 +1,17 @@
+@startuml
+MainProcess -> Dataset : pobierz problem TSP
+MainProcess <- Dataset : zapewnij problem TSP
+
+MainProcess -> SolverTspProcess: utwórz
+MainProcess -> SolverTspProcess: zacznij oczekiwanie na sygnał
+MainProcess <- SolverTspProcess: pobierz PID do śledzenia
+MainProcess -> CpuProfilerProcess  : utwórz i przekaż PID do śledzenia
+MainProcess -> CpuProfilerProcess  : zacznij oczekiwanie na sygnał
+MainProcess -> CpuProfilerProcess  : wyślij sygnał by zacząć pomiar CPU
+CpuProfilerProcess  -> SolverTspProcess: wyślij sygnał do zaczęcia obliczeń
+SolverTspProcess <-> CpuProfilerProcess  : pomiar CPU dopóki SolverTspProcess istnieje
+MainProcess <- SolverTspProcess : koniec obliczeń zwrócenie wyników
+MainProcess <- CpuProfilerProcess  : koniec śledzenia zwrócenie wyników
+
+
+@enduml
